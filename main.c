@@ -81,11 +81,16 @@ int main () {
     char m[20];
     int length;
 
-    scanf("%s", name);
-    FILE *p = fopen(name, "r");
+    FILE *p = fopen("../inputs.txt", "r");
+
+    if (p == NULL) {
+        printf("File not found!\n");
+        exit(1);
+    }
+
     char **array = getListFile(p, &length);
 
-     FILE *q = fopen("output.txt", "w");
+     // FILE *q = fopen("output.txt", "w");
 
 
 
@@ -288,6 +293,15 @@ int compare (char i, char j) {
 
     return -1;
 }
+
+
+int isOpening (char p) {
+    return p == '(' || p == '[' || p == '{' || p == '<';
+}
+
+
+
+
 
 
 struct node_list* infix_to_postfix (char *s) {
@@ -594,38 +608,37 @@ char* getParanthesis (char *string) {
 
 void reverseString (char *s) {
 
-    int length = strlen(s);
+    const size_t length = strlen(s);
 
-    int i, j;
-    char temp;
+    size_t i, j;
     int index;
     for (i = 0, j = length - 1; i<length/2;i++, j--) {
 
-        if (index = contains(s[i], "])}>")) {
+        if ((index = contains(s[i], "])}>"))) {
             s[i] = "[({<"[index-1];
 
         }
-        else if (index = contains(s[i], "[({<")) {
+        else if ((index = contains(s[i], "[({<"))) {
             s[i] = "])}>"[index-1];
 
         }
-        if (index = contains(s[j], "])}>")) {
+        if ((index = contains(s[j], "])}>"))) {
             s[j] = "[({<"[index-1];
 
         }
-        else if (index = contains(s[j], "[({<")) {
+        else if ((index = contains(s[j], "[({<"))) {
             s[j] = "])}>"[index-1];
 
         }
 
-        if (length % 2 != 0 && (index = contains(s[length / 2], "])}>"))) {
+        if (length % 2 != 0 && ((index = contains(s[length / 2], "])}>")))) {
             s[length/2] = "[({<"[index-1];
         }
-        else if (length % 2 != 0 && (index = contains(s[length / 2], "[({<"))) {
+        else if (length % 2 != 0 && ((index = contains(s[length / 2], "[({<")))) {
             s[length/2] = "])}>"[index-1];
         }
 
-        temp = s[i];
+        char temp = s[i];
         s[i] = s[j];
         s[j] = temp;
     }
