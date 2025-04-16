@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include "Stack.h"
+#include "dynamic_array.h"
 
 struct node_list {
     char *data;
@@ -132,7 +133,7 @@ int main () {
                 break;
 
             case 5:
-                exit(1);
+                exit(0);
         }
 
 
@@ -425,20 +426,25 @@ int readFile (char **s, FILE *p) {
 
     (*s)[i] = '\0';
 
-    char *new = realloc(*s, i+1);
-
-    if (new == NULL) {
-        printf("Failed");
-        exit(1);
-    }
-    else if (new != *s) {
-        *s = new;
-        new = NULL;
-    }
+    // char *new = realloc(*s, i+1);
+    //
+    // if (new == NULL) {
+    //     printf("Failed");
+    //     exit(1);
+    // }
+    // if (new != *s) {
+    //     *s = new;
+    //     new = NULL;
+    // }
 
     return n;
 }
 
+/*
+ * read the file and return a list of strings
+ * each string is a line in the file
+ * length is the number of lines in the file
+ */
 
 char** getListFile (FILE *p, int *length) {
 
@@ -448,7 +454,7 @@ char** getListFile (FILE *p, int *length) {
     int n;
     int count = 0;
 
-    while ((n = readFile(&m, p)) && (count < 1)) {
+    while (((n = readFile(&m, p))) && (count < 1)) {
 
         if (n == -1)  {
             break;
