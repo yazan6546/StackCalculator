@@ -4,11 +4,11 @@
 
 #include "dynamic_array.h"
 
-dynamic_array* createDynamicArray(const int capacity) {
+dynamic_array* createDynamicArray(const size_t capacity) {
     dynamic_array* arr = (dynamic_array*)malloc(sizeof(dynamic_array));
     arr->capacity = capacity;
     arr->size = 0;
-    arr->array = (int*)malloc(capacity * sizeof(int));
+    arr->array = (char*)malloc(capacity);
     return arr;
 }
 
@@ -17,9 +17,9 @@ void deleteDynamicArray(dynamic_array* arr) {
     free(arr);
 }
 
-void resizeDynamicArray(dynamic_array* arr, const int new_capacity) {
+void resizeDynamicArray(dynamic_array* arr, const size_t new_capacity) {
     arr->capacity = new_capacity;
-    int *temp = (int*)realloc(arr->array, arr->capacity * sizeof(int));
+    char *temp = (char*)realloc(arr->array, arr->capacity);
 
     if (temp == NULL) {
         printf("Reallocation failed!");
@@ -30,14 +30,14 @@ void resizeDynamicArray(dynamic_array* arr, const int new_capacity) {
 }
 
 
-void addElement(dynamic_array* arr, const int element) {
+void addElement(dynamic_array* arr, const char element) {
     if (arr->size >= arr->capacity) {
         resizeDynamicArray(arr, arr->capacity * 2);
     }
     arr->array[arr->size++] = element;
 }
 
-int getElement(const dynamic_array* arr, const int index) {
+int getElement(const dynamic_array* arr, const size_t index) {
     if (index < 0 || index >= arr->size) {
         printf("Index out of bounds!");
         exit(1);
@@ -51,7 +51,7 @@ int deleteTopElement(dynamic_array* arr) {
         exit(1);
     }
     arr->size--;
-    int temp =  arr->array[arr->size];
+    const char temp =  arr->array[arr->size];
 
     if (arr->size < arr->capacity / 4) {
         resizeDynamicArray(arr, arr->capacity / 2);

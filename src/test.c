@@ -8,11 +8,14 @@
 
 int main() {
 
-    while (1) {
-        char s[100];
-        char *out;
-        scanf("%s", s);
-        out = getParanthesis(s);
-        printf("%s\n\n", out);
-    }
+    // while (1) {
+    //     char s[100];
+    //     char *out;
+    //     scanf("%s", s);
+    //     out = getParanthesis(s);
+    //     printf("%s\n\n", out);
+    // }
+
+    size_t x = 0;
+    printf("%llu", x);
 }

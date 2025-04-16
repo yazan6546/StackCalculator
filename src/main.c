@@ -573,8 +573,7 @@ int isBalanced (char *string, char *reason) {
 
 void undoReverse (struct node_list* l) {
 
-    struct node_list* p = l->next;
-    for (;p!=NULL;p = p->next) {
+    for (struct node_list* p = l->next;p!=NULL;p = p->next) {
 
         reverseString(p->data);
     }
