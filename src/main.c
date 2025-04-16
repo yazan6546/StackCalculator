@@ -308,15 +308,12 @@ struct node_list* infix_to_postfix (char *s) {
     Stack *stack = NULL;
     stack = createStack(stack);
 
-    struct node_list *last;
-
 
     for (char *q = s; *q; q++) {
 
-        last = getLastNode_list(list);
+        const struct node_list *last = getLastNode_list(list);
 
         if (isEmpty_list(list) && isdigit(*q)) {
-
 
             addLast_list(list, (char[10]) {*q, '\0'}); //you cant add any more characters!
         }
@@ -733,15 +730,15 @@ void addLast_list(struct node_list* L, char* data) {
         p = p->next;
     }
 
-    int length = strlen(data);
+    const size_t length = strlen(data);
 
-    char *temp = malloc(length + 11);
+    char *temp = malloc(length + 1);
 
     if (temp == NULL) {
         printf("out of memory");
         exit(1);
     }
-    strncpy(temp, data, 11);
+    strncpy(temp, data, length + 1);
     temp[length] = '\0';
 
     p->next = newNode;
@@ -757,10 +754,10 @@ void addFirst_list (struct node_list* L, char* data) {
         exit(1);
     }
 
-    int length = strlen(data);
+    const size_t length = strlen(data);
 
-    char *temp = malloc(length + 11);
-    strncpy(temp, data, 11);
+    char *temp = malloc(length + 1);
+    strncpy(temp, data, length + 1);
     temp[length] = '\0';
 
     newNode->next = L->next;

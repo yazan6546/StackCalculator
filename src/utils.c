@@ -23,6 +23,7 @@ char* getParanthesis (char *string) {
 
     if (new == NULL) {
         printf("mission failed.");
+        exit(1);
     }
     else if (new != par) {
         par = new;

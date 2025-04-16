@@ -10,8 +10,9 @@ int main() {
 
     while (1) {
         char s[100];
+        char *out;
         scanf("%s", s);
-        reverseString(s);
-        printf("%s\n\n", s);
+        out = getParanthesis(s);
+        printf("%s\n\n", out);
     }
 }

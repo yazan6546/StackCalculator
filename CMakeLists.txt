@@ -10,6 +10,6 @@ add_executable(StackCalculator src/main.c
         )
 
 
-add_executable(test src/test.c src/dynamic_array.c src/Stack.c)
+add_executable(test src/test.c src/dynamic_array.c src/Stack.c src/utils.c)
 
 include_directories(include)
