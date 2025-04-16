@@ -82,7 +82,7 @@ int main () {
 
     scanf("%s", name);
     FILE *p = fopen(name, "r");
-     char **array = getListFile(p, &length);
+    char **array = getListFile(p, &length);
 
      FILE *q = fopen("output.txt", "w");
 
@@ -105,7 +105,7 @@ int main () {
     }
     int i;
 
-    for (;;) {
+    while (1) {
         showMenu();
         scanf("%d", &i);
 
