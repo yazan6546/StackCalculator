@@ -3,11 +3,13 @@ project(StackCalculator)
 
 set(CMAKE_CXX_STANDARD 20)
 #
-add_executable(StackCalculator main.c
-        dynamic_array.c
-        dynamic_array.h
-        Stack.c
-        Stack.h)
+add_executable(StackCalculator src/main.c
+        src/dynamic_array.c
+        src/Stack.c
+        src/utils.c
+        )
 
 
-add_executable(test test.c dynamic_array.c Stack.c)
+add_executable(test src/test.c src/dynamic_array.c src/Stack.c)
+
+include_directories(include)
