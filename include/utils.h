@@ -16,4 +16,5 @@ int operatorPrecedence(char op);
 int isOperator (char c);
 int isOpening (char p);
 int isClosing (char p);
+char** splitString(const char* input, int* count);
 #endif //UTILS_H

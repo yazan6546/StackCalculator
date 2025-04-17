@@ -100,3 +100,52 @@ int isOpening (char p) {
 int isClosing (char p) {
     return contains(p, ")]}>");
 }
+
+
+char** splitString(const char* input, int* count) {
+    // Copy the input string to avoid modifying the original
+    char* str = strdup(input);
+    if (str == NULL) {
+        printf("Out of memory!\n");
+        exit(1);
+    }
+
+    // Count the number of tokens
+    *count = 0;
+    char* temp = strdup(input);
+    char* token = strtok(temp, " ");
+    while (token != NULL) {
+        (*count)++;
+        token = strtok(NULL, " ");
+    }
+    free(temp);
+
+    // Allocate memory for the array of strings
+    char** result = malloc((*count) * sizeof(char*));
+    if (result == NULL) {
+        printf("Out of memory!\n");
+        free(str);
+        exit(1);
+    }
+
+    // Tokenize the string and store each token in the array
+    int index = 0;
+    token = strtok(str, " ");
+    while (token != NULL) {
+        result[index] = strdup(token);
+        if (result[index] == NULL) {
+            printf("Out of memory!\n");
+            free(str);
+            for (int i = 0; i < index; i++) {
+                free(result[i]);
+            }
+            free(result);
+            exit(1);
+        }
+        index++;
+        token = strtok(NULL, " ");
+    }
+
+    free(str);
+    return result;
+}

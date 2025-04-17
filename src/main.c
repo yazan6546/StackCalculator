@@ -9,6 +9,7 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <stdbool.h>
+#include <utils.h>
 
 #include "Stack.h"
 #include "dynamic_array.h"
@@ -17,24 +18,17 @@
 
 
 int checkValidity(char *string, char *reason);
-int isOperator (char c);
 char* readString ();
 int compare (char i, char j);
 int isdigit_string (char *s);
 void removeOperators (Stack *stack, struct node_list *list, char op);
 void removePar(struct node_list *s);
-struct node_list* infix_to_postfix (char *s);
 int readFile (char **s, FILE *p);
 char** getListFile (FILE *p, int *length);
 char reverseParanthesis (char par);
 void createSubString (char *string, char *start, char par);
 int evaluatePreFix (struct node_list* list);
-int isOpening (char p);
-int isClosing (char p);
 int isBalanced (char *string, char *reason);
-char* getParanthesis (char *string);
-void reverseString (char *s);
-int contains (char q, char *string);
 void undoReverse (struct node_list* l);
 void handleReason (char *string, const char *character, char *reason);
 void showMenu ();
@@ -42,6 +36,8 @@ void printStatus (char **arr, int length);
 void convertToInfix (struct node_list** arr, int length);
 void evaluatePrefix1 (struct node_list **arr, int length);
 
+char* convertInfixToPostfix(char *s);
+char* convertToPrefix(char *infix);
 
 int main () {
 
@@ -80,9 +76,11 @@ int main () {
         // printf("okok\n");
         // fflush(stdout);
         // if (valid) {
-            list[i] = infix_to_postfix(array[i]);
+        array[i] = convertToPrefix(array[i]);
+        printf("%s\n", array[i]);
         // }
     }
+
     int i;
 
     while (1) {
@@ -140,7 +138,6 @@ void showMenu () {
 }
 
 
-
 int checkValidity(char *string, char *reason ) {
 
     int index;
@@ -194,7 +191,7 @@ int checkValidity(char *string, char *reason ) {
             strcpy(reason, "");
             return 0;
         }
-        else if (isClosing(*q) && !(isClosing(*(q+1)) || isOperator(*(q+1)) || (*(q+1) == '-'))) {
+        if (isClosing(*q) && !(isClosing(*(q+1)) || isOperator(*(q+1)) || (*(q+1) == '-'))) {
             handleReason(string, q, reason);
             return 0;
         }
@@ -248,123 +245,64 @@ char* readString () {
 }
 
 
+char* convertInfixToPostfix(char *s) {
+    Stack *st = createStack();
+    size_t sz = strlen(s);
+    char *res = malloc(2 * sz + 1); // Allocate enough space for the result (considering spaces)
+    res[0] = '\0'; // Initialize as an empty string
 
-
-
-struct node_list* infix_to_postfix (char *s) {
-
-    reverseString(s);
-    int index;
-
-    struct node_list *list = NULL;
-    list = makeEmpty_list(list);
-
-    Stack *stack = NULL;
-    stack = createStack(stack);
-
-
-    for (char *q = s; *q; q++) {
-
-        const struct node_list *last = getLastNode_list(list);
-
-        if (isEmpty_list(list) && isdigit(*q)) {
-
-            addLast_list(list, (char[10]) {*q, '\0'}); //you cant add any more characters!
-        }
-        else if (isdigit(*q) && isdigit(*(q - 1))) {
-
-            strcat(last->data, (char[2]) {*q, '\0'});
-        }
-        else if (isdigit(*q) && !isdigit(*(q - 1))) {
-
-            addLast_list(list, (char[10]) {*q, '\0'});
-
-        }
-        else if ((isEmpty_stack(stack) && isOperator(*q)) || (isOperator(*q) && (compare(*q, stack->top) >= 0))) {
-            push(stack, *q);
-        }
-        else if (!isEmpty_stack(stack) && isOperator(*q) && (compare(*q, stack->top) == -1)) {
-
-            removeOperators(stack, list, *q);
-            push(stack, *q);
-        }
-
-        else if (isOpening(*q)) {
-            push(stack, *q);
-        }
-        else if ((index = contains(*q, ")]}>"))) {
-
-            char reverse = "([{<"[index-1];
-            while (stack->top != reverse) {
-
-                char n = pop(stack);
-
-                if (isOperator(n) || isdigit(n)) {
-
-                    addLast_list(list, (char[]) {n, '\0'});
-                }
+    for (int i = 0; i < sz; i++) {
+        if (isdigit(s[i])) {
+            // Handle multi-digit numbers
+            while (i < sz && isdigit(s[i])) {
+                strncat(res, (char[2]){s[i], '\0'}, 1);
+                i++;
             }
-        }
-
-    }
-        while (!isEmpty_stack(stack)) {
-
-            char c = pop(stack);
-            addLast_list(list, (char[10]) {c, '\0'});
-
-        }
-    removePar(list);
-    reverseList(list);
-    undoReverse(list);
-    return list;
-
-}
-
-
-
-int isdigit_string (char *s) {
-
-    for (char *q = s; *q; q++) {
-        if (!isdigit(*q)) {
-            return 0;
+            strcat(res, " "); // Add a space after the number
+            i--; // Adjust index since the loop increments it
+        } else if (isalpha(s[i])) {
+            // Handle single-character variables
+            strncat(res, (char[3]){s[i], ' ', '\0'}, 2);
+        } else if (s[i] == '(') {
+            push(st, s[i]); // Push '(' to the stack
+        } else if (s[i] == ')') {
+            // Pop until '(' is found, but do not append '(' or ')' to the result
+            while (!isEmpty_stack(st) && st->top != '(') {
+                strncat(res, (char[3]){pop(st), ' ', '\0'}, 2);
+            }
+            if (!isEmpty_stack(st)) {
+                pop(st); // Remove '('
+            }
+        } else {
+            // Handle operators
+            while (!isEmpty_stack(st) && operatorPrecedence(st->top) <= operatorPrecedence(s[i])) {
+                strncat(res, (char[3]){pop(st), ' ', '\0'}, 2);
+            }
+            push(st, s[i]);
         }
     }
-    return 1;
-}
 
-/*
- * pop operators that have greater precedence than the supplied operator
- * and add to list
- */
-
-void removeOperators (Stack *stack, struct node_list *list, char op) {
-
-    int comp;
-
-    do {
-        char c = pop(stack);
-        addLast_list(list, (char[]) {c, '\0'});
-
-        comp = compare(op, stack->top);
-    } while (comp == -1);
-}
-
-void removePar(struct node_list *s) {
-
-
-    struct node_list *q;
-    for (struct node_list *p = s; p!=NULL;) {
-
-        if (contains(p->data[0], "([{)]}")) {
-            q = p->next;
-            remove_p(s, p);
-            p = q;
-        }
-        else {
-            p = p->next;
-        }
+    // Pop remaining operators
+    while (!isEmpty_stack(st)) {
+        strncat(res, (char[3]){pop(st), ' ', '\0'}, 2);
     }
+
+    deleteStack(st); // Free the stack
+    return res;
 }
+
+// Convert infix expression to prefix notation
+char* convertToPrefix(char *infix) {
+    reverseString(infix);
+
+    char *postfix = convertInfixToPostfix(infix);
+
+    reverseString(postfix);
+    free(infix); // Free the reversed infix string
+    return postfix;
+}
+
+
 
 
 int readFile (char **s, FILE *p) {
@@ -516,14 +454,6 @@ int isBalanced (char *string, char *reason) {
 
 }
 
-
-void undoReverse (struct node_list* l) {
-
-    for (struct node_list* p = l->next;p!=NULL;p = p->next) {
-
-        reverseString(p->data);
-    }
-}
 
 void handleReason (char *string, const char *character, char *reason) {
     //only enters if incorrect.
