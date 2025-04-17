@@ -12,7 +12,7 @@
 char* getParanthesis (char *string);
 void reverseString (char *s);
 int contains (char q, char *string);
-int compare (const char i, const char j);
+int operatorPrecedence(char op);
 int isOperator (char c);
 int isOpening (char p);
 int isClosing (char p);
