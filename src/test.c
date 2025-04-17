@@ -7,15 +7,21 @@
 #include "utils.h"
 #include "LinkedList.h"
 
+struct node_list* infix_to_postfix (char *s);
+void removeOperators (Stack *stack, struct node_list *list, char op);
+void removePar(struct node_list *s);
+void undoReverse (struct node_list* l);
+
 int main() {
 
-    // while (1) {
-    //     char s[100];
-    //     char *out;
-    //     scanf("%s", s);
-    //     out = getParanthesis(s);
-    //     printf("%s\n\n", out);
-    // }
+    while (1) {
+        char s[100];
+        char *out;
+        scanf("%s", s);
+        struct node_list *list = infix_to_postfix(s);
+        printList_list(list);
+        printf("\n");
+    }
 
     size_t x = 0;
     printf("%llu", x);
@@ -87,5 +93,46 @@ struct node_list* infix_to_postfix (char *s) {
     reverseList(list);
     undoReverse(list);
     return list;
+}
 
+/*
+ * pop operators that have greater precedence than the supplied operator
+ * and add to list
+ */
+
+void removeOperators (Stack *stack, struct node_list *list, char op) {
+
+    int comp;
+
+    do {
+        char c = pop(stack);
+        addLast_list(list, (char[]) {c, '\0'});
+
+        comp = compare(op, stack->top);
+    } while (comp == -1);
+}
+
+void removePar(struct node_list *s) {
+
+
+    struct node_list *q;
+    for (struct node_list *p = s; p!=NULL;) {
+
+        if (contains(p->data[0], "([{)]}")) {
+            q = p->next;
+            remove_p(s, p);
+            p = q;
+        }
+        else {
+            p = p->next;
+        }
+    }
+}
+
+void undoReverse (struct node_list* l) {
+
+    for (struct node_list* p = l->next;p!=NULL;p = p->next) {
+
+        reverseString(p->data);
+    }
 }

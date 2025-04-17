@@ -102,3 +102,12 @@ int compare (const char i, const char j) {
 int isOperator (char c) {
     return c >= 42 && c <= 47;
 }
+
+
+int isOpening (char p) {
+    return contains(p, "([{<");
+}
+
+int isClosing (char p) {
+    return contains(p, ")]}>");
+}

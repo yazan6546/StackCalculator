@@ -233,6 +233,8 @@ void remove_int (struct node_list* L, char* data) {
     free(temp);
 }
 
+// removes the node_list p from the list
+
 void remove_p (struct node_list* L, struct node_list *p) {
 
     struct node_list* prev = findPrevious_p(L, p);

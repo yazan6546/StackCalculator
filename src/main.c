@@ -480,13 +480,6 @@ int evaluatePreFix (struct node_list* list) {
     return top;
 }
 
-int isOpening (char p) {
-    return contains(p, "([{<");
-}
-
-int isClosing (char p) {
-    return contains(p, ")]}>");
-}
 
 int isBalanced (char *string, char *reason) {
 

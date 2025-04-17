@@ -7,9 +7,10 @@ add_executable(StackCalculator src/main.c
         src/dynamic_array.c
         src/Stack.c
         src/utils.c
+        src/LinkedList.c
         )
 
 
-add_executable(test src/test.c src/dynamic_array.c src/Stack.c src/utils.c)
+add_executable(test src/test.c src/dynamic_array.c src/Stack.c src/utils.c src/LinkedList.c)
 
 include_directories(include)
