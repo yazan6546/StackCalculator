@@ -12,4 +12,6 @@
 char* getParanthesis (char *string);
 void reverseString (char *s);
 int contains (char q, char *string);
+int compare (const char i, const char j);
+int isOperator (char c);
 #endif //UTILS_H

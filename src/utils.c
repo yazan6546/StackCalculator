@@ -78,3 +78,27 @@ int contains (char q, char *string) {
     }
     return 0;
 }
+
+int compare (const char i, const char j) {
+
+    if (!isOperator(j)) {
+        return 2;
+    }
+
+    if ((i == j) || (i + 5 == j)) {
+        return 0;
+    }
+    if ((i == '+') && (j == '-') || ((j == '+') && (i == '-'))) {
+        return 0;
+    }
+    if ((i == '*') || (i == '/') || i == '^') {
+        return 1;
+    }
+
+    return -1;
+}
+
+
+int isOperator (char c) {
+    return c >= 42 && c <= 47;
+}

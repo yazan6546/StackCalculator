@@ -17,7 +17,6 @@ Stack* createStack();
 void deleteStack (Stack* s);
 char pop(Stack* s);
 void push(Stack* s, int data);
-void doubleCapacity(Stack* s);
 int isEmpty_stack(Stack* s);
 
 #endif //STACK_H
