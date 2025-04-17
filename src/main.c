@@ -8,6 +8,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <stdbool.h>
+
 #include "Stack.h"
 #include "dynamic_array.h"
 
@@ -39,7 +41,7 @@ char* getParanthesis (char *string);
 void reverseString (char *s);
 int contains (char q, char *string);
 void undoReverse (struct node_list* l);
-void handleReason (char *string, char *character, char *reason);
+void handleReason (char *string, const char *character, char *reason);
 void showMenu ();
 void printStatus (char **arr, int length);
 void convertToInfix (struct node_list** arr, int length);
@@ -69,16 +71,13 @@ struct node_list* concat(struct node_list* l1, struct node_list* l2);
 void reverseList(struct node_list* L);
 void deleteNode (struct node_list* p);
 
-char* getParanthesis (char *string);
+
 int main () {
 
     printf("Enter the name of the input file\n");
     char name[20];
 
 
-    char n[20];
-
-    char m[20];
     int length;
 
     FILE *p = fopen("../inputs.txt", "r");
@@ -105,9 +104,13 @@ int main () {
     }
 
     for (int i = 0;i<length;i++) {
-        if (checkValidity(list[i]->data, n)) {
+        char n[20];
+        // bool valid = checkValidity(list[i]->data, n);
+        // printf("okok\n");
+        // fflush(stdout);
+        // if (valid) {
             list[i] = infix_to_postfix(array[i]);
-        }
+        // }
     }
     int i;
 
@@ -131,6 +134,7 @@ int main () {
 
             case 4:
                 for (int i = 0; i < length; i++) {
+                    char m[20];
                     if (!checkValidity(array[i], m)) {
                         printf("Invalid equation :  %s\n", array[i]);
                     }
@@ -169,6 +173,8 @@ void showMenu () {
 int checkValidity(char *string, char *reason ) {
 
     int index;
+
+    fflush(stdout);
 
     char *Par = getParanthesis(string);
     char *q = string;
@@ -273,7 +279,7 @@ char* readString () {
     return s;
 }
 
-int compare (char i, char j) {
+int compare (const char i, const char j) {
 
     if (!isOperator(j)) {
         return 2;
@@ -282,12 +288,10 @@ int compare (char i, char j) {
     if ((i == j) || (i + 5 == j)) {
         return 0;
     }
-
-    else if ((i == '+') && (j == '-') || ((j == '+') && (i == '-'))) {
+    if ((i == '+') && (j == '-') || ((j == '+') && (i == '-'))) {
         return 0;
     }
-
-    else if ((i == '*') || (i == '/') || i == '^') {
+    if ((i == '*') || (i == '/') || i == '^') {
         return 1;
     }
 
@@ -327,7 +331,6 @@ struct node_list* infix_to_postfix (char *s) {
 
         }
         else if ((isEmpty_stack(stack) && isOperator(*q)) || (isOperator(*q) && (compare(*q, stack->top) >= 0))) {
-
             push(stack, *q);
         }
         else if (!isEmpty_stack(stack) && isOperator(*q) && (compare(*q, stack->top) == -1)) {
@@ -339,7 +342,7 @@ struct node_list* infix_to_postfix (char *s) {
         else if (isOpening(*q)) {
             push(stack, *q);
         }
-        else if (index = contains(*q, ")]}>")) {
+        else if ((index = contains(*q, ")]}>"))) {
 
             char reverse = "([{<"[index-1];
             while (stack->top != reverse) {
@@ -555,7 +558,7 @@ int isBalanced (char *string, char *reason) {
             return 0;
 
         }
-        else if ((index = contains(*q, "])}>")) && ((stack->top) == "[({<"[index - 1])) {
+        else if (((index = contains(*q, "])}>"))) && ((stack->top) == "[({<"[index - 1])) {
             pop(stack);
         }
     }
@@ -579,7 +582,7 @@ void undoReverse (struct node_list* l) {
     }
 }
 
-void handleReason (char *string, char *character, char *reason) {
+void handleReason (char *string, const char *character, char *reason) {
     //only enters if incorrect.
 
     if (isdigit(*character) && !isOperator(*(character + 1) )) {

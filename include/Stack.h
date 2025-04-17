@@ -8,14 +8,14 @@
 #include "dynamic_array.h"
 
 typedef struct {
-    int top;
+    char top;
     dynamic_array* array;
 
 } Stack;
 
 Stack* createStack();
 void deleteStack (Stack* s);
-int pop(Stack* s);
+char pop(Stack* s);
 void push(Stack* s, int data);
 void doubleCapacity(Stack* s);
 int isEmpty_stack(Stack* s);

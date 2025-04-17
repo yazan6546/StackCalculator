@@ -37,7 +37,7 @@ void addElement(dynamic_array* arr, const char element) {
     arr->array[arr->size++] = element;
 }
 
-int getElement(const dynamic_array* arr, const size_t index) {
+char getElement(const dynamic_array* arr, const size_t index) {
     if (index < 0 || index >= arr->size) {
         printf("Index out of bounds!");
         exit(1);
@@ -45,7 +45,7 @@ int getElement(const dynamic_array* arr, const size_t index) {
     return arr->array[index];
 }
 
-int deleteTopElement(dynamic_array* arr) {
+char deleteTopElement(dynamic_array* arr) {
     if (arr->size == 0) {
         printf("Array is empty!");
         exit(1);

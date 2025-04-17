@@ -31,7 +31,7 @@ void deleteStack (Stack* s) {
 }
 
 
-int pop(Stack* s) {
+char pop(Stack* s) {
     return deleteTopElement(s->array);
 }
 

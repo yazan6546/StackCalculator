@@ -20,8 +20,8 @@ typedef struct dynamic_array {
 dynamic_array* createDynamicArray(size_t capacity);
 void deleteDynamicArray(dynamic_array* arr);
 void addElement(dynamic_array* arr, char element);
-int deleteTopElement(dynamic_array* arr);
-int getElement(const dynamic_array* arr, size_t index);
+char deleteTopElement(dynamic_array* arr);
+char getElement(const dynamic_array* arr, size_t index);
 void printDynamicArray(const dynamic_array* arr);
 void resizeDynamicArray(dynamic_array* arr, size_t new_capacity);
 
